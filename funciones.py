@@ -57,7 +57,7 @@ def ingresar_entero(mensaje:str) -> int:
     """
     numero = input(mensaje)
     while not es_entero(numero):
-        print("ERROR NO ES UN NUMERO") 
+        print("ERROR NO ES UN NUMERO") #si no es un numero
         numero = input(mensaje)
     numero = int(numero)
     return numero
@@ -67,7 +67,7 @@ def ingresar_entero_rango(mensaje:str,mensaje_error:str,minimo:int,maximo:int) -
 
     Args:
         mensaje (str): mensaje que se mostrará al usuario para solicitar el dato
-        mensaje_error (str): mensaje que se mostrará al usuario si el número ingresado no está dentro del rango
+        mensaje_error (str): mensaje que se mostrará al usuario si el número ingresado no está dentro del rango.
         minimo (int): numero mínimo permitido
         maximo (int): numero maximo permitido
 
@@ -76,19 +76,19 @@ def ingresar_entero_rango(mensaje:str,mensaje_error:str,minimo:int,maximo:int) -
     """
     numero = ingresar_entero(mensaje)
     while numero > maximo or numero < minimo:
-        numero = ingresar_entero(mensaje_error)
+        numero = ingresar_entero(mensaje_error) #si no esta en el rango especificado
 
     return numero
 
 
 def es_alfabetico(cadena:str) -> bool:
-    """verifica si una cadena de texto contiene solo letras del alfabeto (mayúsculas o minúsculas). La función recibe un argumento:
+    """verifica si una cadena de texto contiene solo letras del alfabeto.
     Args:
         cadena (str): cadena de texto que se desea verificar si contiene solo letras del alfabeto
     Returns:
         bool: devuelve True si la cadena contiene solo letras del alfabeto, False en caso contrario
     """
-    if len(cadena) > 0:
+    if len(cadena) > 0: #longitud. si la cadena no está vacía, entonces...
         retorno = True
         for i in range(len(cadena)):
             valor_ascii = ord(cadena[i])
@@ -97,7 +97,6 @@ def es_alfabetico(cadena:str) -> bool:
                 break
     else:
         retorno = False 
-    
     return retorno
 
 
@@ -108,7 +107,7 @@ def cargar_nombres_participantes(array_nombres:list) -> None:
     Args:
         array_nombres (list): lista donde se guardarán los nombres de los participantes
     """
-    for i in range(len(array_nombres)):
+    for i in range(len(array_nombres)): 
         while True:
             #solicita dato
             nombre = input(f"Ingrese el nombre del participante #{i+1}: ")
@@ -131,7 +130,6 @@ def cargar_puntuacion_participantes(array_jurados:list) -> None:
     Returns:
         None
     """
-# teniendo en cuenta que son 5 participantes y 3 jurados:
     for fil in range(len(array_jurados)):
         for col in range(len(array_jurados[fil])):
             while True:
@@ -140,23 +138,19 @@ def cargar_puntuacion_participantes(array_jurados:list) -> None:
                 #validacion de datos ingresados (entre 1 y 10)
                 if 1 <= puntuacion <= 10:
                     #si cumple, se guarda
-                    array_jurados[fil][col] = puntuacion # escribir [fil]y [col] es mas confiable que usar [i] y [j]
+                    array_jurados[fil][col] = puntuacion 
                     break
                 else:
                     print("ERROR: La puntuación debe ser un número entre 1 y 10. Intente nuevamente.")
 
 
 def calcular_promedio(puntajes:list) -> float:
-    """calcula el promedio de una lista de numeros (puntajes). recibe una lista de puntajes y devuelve el promedio. si la lista está vacía, puede generar un error de división por cero, por lo que se asume que siempre se pasará una lista con al menos un elemento.
-
+    """calcula el promedio de una lista de numeros (puntajes). recibe una lista de puntajes y devuelve el promedio que se utiliza más adelante
     Args:
         puntajes (list): lista de números (enteros o flotantes) de la cual calcular el promedio.
-
     Returns:
         float: el promedio de los números en la lista, o 0.0 si la lista está vacía
     """
-    if not puntajes: # si la lista está vacía, retorna 0.0 para evitar división por cero
-        return 0.0
     suma = 0
     for puntaje in puntajes:
         suma += puntaje
@@ -171,13 +165,6 @@ def mostrar_puntuaciones(array_nombres:list,array_jurados:list) -> None:
         array_nombres (list): lista de nombres de los participantes
         array_jurados (list): matriz de puntuaciones de los participantes por jurados
     """
-    #para evitar usar len(...) == 0, hacemos:
-    if not array_nombres or not array_jurados:
-        print("No hay participantes o puntuaciones para mostrar.")
-        return
-    if len(array_nombres) != len(array_jurados):
-        print("Error: La cantidad de participantes y puntuaciones no coincide.")
-        return
     for i in range(len(array_nombres)):
         print(f"\nNombre: {array_nombres[i]}")
         print(f"Nota jurado 1: {array_jurados[i][0]}")
@@ -186,31 +173,41 @@ def mostrar_puntuaciones(array_nombres:list,array_jurados:list) -> None:
         print(f"Promedio: {calcular_promedio(array_jurados[i]):.2f}")
 
 def obtener_promedios_por_jurado(array_jurados: list) -> list:
-    """calcula el promedio de las puntuaciones otorgadas por cada jurado. Maneja errores. crea una lista para almacenar los puntajes de cada jurado y luego calcula el promedio de cada uno asegurandose de que se tengan al menos 3 elementos para manejar errores. si la matriz está vacía, no realiza ningún cálculo y retorna una lista vacía.
-
+    """calcula el promedio de las puntuaciones otorgadas por cada jurado. Maneja errores. crea una lista para almacenar los puntajes de cada jurado y luego calcula el promedio de cada uno. si la matriz está vacía, no realiza ningún cálculo y retorna una lista vacía.
     Args:
         array_jurados (list): matriz de puntuaciones de los participantes por jurados
-
     Returns:
         list: retorna una lista con los promedios de cada jurado
-    """
-    if not array_jurados or len(array_jurados) < 3:  # si la matriz está vacía o tiene menos de 3 filas, no se puede calcular el promedio
-        return []
-    
+    # """
     promedios = []
     for col in range(len(array_jurados[0])):  # iterar sobre las columnas (jurados)
         suma = 0
         for fil in range(len(array_jurados)):  # iterar sobre las filas (participantes)
             suma += array_jurados[fil][col]  # sumar las puntuaciones del jurado
         promedio = suma / len(array_jurados)  # calcular el promedio
-        promedios.append(promedio)  # agregar el promedio a la lista
+        promedios += [promedio]  #actualiza
     
     return promedios
 
+def mostrar_promedio_jurados(array_jurados: list) -> list: 
+    """calcula el promedio de las puntuaciones otorgadas por cada jurado. si la matriz está vacía, no realiza ningún cálculo.
+    Args:
+        array_jurados (list): matriz de puntuaciones de los participantes por jurados
+    Returns:
+        float: retorna una lista con los promedios de cada jurado
+    """
+    promedios = obtener_promedios_por_jurado(array_jurados) #llama a la función y le pasa el argumento
+    print("\nPromedio de cada jurado:")
+    if promedios: 
+        for i in range(len(promedios)):
+            print(f"Jurado {i + 1}: {promedios[i]:.2f}") 
+    else:
+        print("No se pudieron calcular promedios de jurados (matriz vacía o incorrecta).")
+    return promedios # retorna los promedios calculados
     
+
 def mostrar_participantes_promedio_menor(array_nombres:list, array_jurados:list, promedio_minimo:float) -> None:
     """muestra los nombres y promedios de los participantes que tienen un promedio menor al establecido. recibe una lista de nombres, una matriz de puntuaciones y un promedio mínimo. itera sobre los participantes, calcula su promedio y muestra el nombre y el promedio si es menor al promedio mínimo. si no hay participantes con un promedio menor al establecido, muestra un mensaje indicando que no hay participantes con ese criterio.
-
     Args:
         array_nombres (list): lista de nombres de los participantes
         array_jurados (list): matriz de puntuaciones de los participantes por jurados
@@ -225,56 +222,37 @@ def mostrar_participantes_promedio_menor(array_nombres:list, array_jurados:list,
     if not existen_participantes:
         print("No hay participantes con un promedio menor a {promedio_minimo}.")
 
-def calcular_promedio_jurados(array_jurados: list) -> list: 
-    """Calcula el promedio de las puntuaciones otorgadas por cada jurado. si la matriz está vacía, no realiza ningún cálculo.
-    Args:
-        array_jurados (list): matriz de puntuaciones de los participantes por jurados
-
-    Returns:
-        float: retorna una lista con los promedios de cada jurado
-    """
-    promedios = obtener_promedios_por_jurado(array_jurados)
-    print("\nPromedio de cada jurado:")
-    if promedios: #si hay promedios:
-        for i in range(len(promedios)):
-            print(f"Jurado {i + 1}: {promedios[i]:.2f}") #se podría separar
-    else:
-        print("No se pudieron calcular promedios de jurados (matriz vacía o incorrecta).")
-    return promedios # retorna los promedios calculados
 
      
 def mostrar_jurado_promedio_minimo (array_jurados:list) -> float:
-    """muestra el jurado que otorgó el promedio más bajo. recibe una lista de promedios de jurados y encuentra el mínimo. imprime el índice del jurado (sumando 1 para que sea más intuitivo) y el promedio más bajo. si la lista está vacía, no realiza ningún calculo
+    """muestra el jurado que otorgó el promedio más bajo. busca el valor más bajo dentro de array_jurados recorriendo la lista y cuando lo encuentra actualiza y guarda su posición. 
+    
     Args:
         array_jurados (list): lista de promedios de jurados
+    
     Returns:
         float: retorna el promedio más bajo de los jurados
     """
-    if not array_jurados:
-        print("No hay promedios de jurados para mostrar.")
-        return 0.0
-    
     minimo = array_jurados[0]
     indice_minimo = 0
     for i in range(len(array_jurados)):
         if array_jurados[i] < minimo:
-            minimo = array_jurados[i]
+            minimo = array_jurados[i] 
             indice_minimo = i
     print(f"El jurado N {indice_minimo + 1} dio el promedio más bajo {minimo:.2f}")
     return minimo       
 
 def mostrar_jurado_promedio_maximo (array_jurados:list) -> float:
-    """muestra el jurado que otorgó el promedio más alto. recibe una lista de promedios de jurados y encuentra el máximo. imprime el índice del jurado (sumando 1 para que sea más intuitivo) y el promedio más alto. si la lista está vacía, no realiza ningún calculo
+    """muestra el jurado que otorgó el promedio más alto. busca el valor más alto dentro de array_jurados recorriendo la lista y cuando lo encuentra actualiza y guarda su posición. 
+    
     Args:
         array_jurados (list): lista de promedios de jurados
+    
     Returns:
         float:  retorna el promedio más alto de los jurados
     """
-    if not array_jurados:
-        print("No hay promedios de jurados para mostrar.")
-        return 0.0
-    maximo = array_jurados[0]
-    indice_maximo = 0
+    maximo = array_jurados[0] #incializa posición
+    indice_maximo = 0 #guarda
     for i in range(len(array_jurados)):
         if array_jurados[i] > maximo:
             maximo = array_jurados[i]
@@ -290,10 +268,10 @@ def mostrar_participantes_puntuaciones_iguales(array_nombres:list, array_jurados
         array_jurados (list): matriz de puntuaciones de los participantes por jurados
     """
     existen_participantes = False # variable para controlar si existen participantes con puntuaciones iguales
-    for i in range(len(array_nombres)):
+    for i in range(len(array_nombres)): 
         if array_jurados[i][0] == array_jurados[i][1] == array_jurados[i][2]:
             existen_participantes = True
-            print(f"Nombre: {array_nombres[i]}, Puntuación: {array_jurados[i][0]}")
+            print(f"Nombre: {array_nombres[i]}, Puntuación: {array_jurados[i][0]}") # si coinciden entonces se muestra solo 1
 
     if not existen_participantes:
         # si no existen participantes con puntuaciones iguales, se imprime un mensaje
@@ -301,19 +279,17 @@ def mostrar_participantes_puntuaciones_iguales(array_nombres:list, array_jurados
 
 def buscar_participantes_por_nombre(array_nombres:list, array_jurados:list, nombre_buscado:str) -> None:
     """busca un participante por su nombre en la lista de nombres y muestra sus puntuaciones y promedio. recibe una lista de nombres, una matriz de puntuaciones y el nombre del participante a buscar. itera sobre la lista de nombres, compara cada nombre con el nombre buscado y si encuentra una coincidencia, muestra el nombre, las puntuaciones de cada jurado y el promedio. si no encuentra al participante, muestra un mensaje indicando que no se encontró."
-
     Args:
         array_nombres (list): lista de nombres de los participantes
         array_jurados (list): matriz de puntuaciones de los participantes por jurados
         nombre_buscado (str): nombre del participante a buscar
     """
-    encontrado = False  # variable para controlar si se encontró el participante
+    encontrado = False  
     for i in range(len(array_nombres)):
-        if array_nombres[i] == nombre_buscado:  # comparación sin distinción entre mayúsculas y minúsculas si se puede usar .lower() iría después de array_nombres[i] y nombre_buscado para evitar errores de entradas
-            #si la bandera cambia a true se imprime toda la información guardada anteriormente
+        if array_nombres[i] == nombre_buscado:  
             encontrado = True
-            print(f"Nombre: {array_nombres[i]}") #["ana", "pepe", "claudio"]
-            print(f"Puntuación jurado 1: {array_jurados[i][0]}") # ["","",""]
+            print(f"\nNombre: {array_nombres[i]}") 
+            print(f"Puntuación jurado 1: {array_jurados[i][0]}") 
             print(f"Puntuación jurado 2: {array_jurados[i][1]}")
             print(f"Puntuación jurado 3: {array_jurados[i][2]}")
             print(f"Promedio: {calcular_promedio(array_jurados[i]):.2f}")
